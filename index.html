@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My ❤️</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ff4e50, #1a1a2e);
+        overflow: hidden;
+        color: white;
+      }
+
+      /* floating hearts */
+      .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        transform: rotate(45deg);
+        animation: float 6s linear infinite;
+      }
+
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        border-radius: 50%;
+      }
+
+      .heart::before {
+        top: -10px;
+        left: 0;
+      }
+      .heart::after {
+        left: -10px;
+        top: 0;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(45deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-10vh) rotate(45deg);
+          opacity: 0;
+        }
+      }
+
+      .container {
+        text-align: center;
+        backdrop-filter: blur(15px);
+        padding: 40px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+
+      #time {
+        font-size: 22px;
+        margin: 20px 0;
+      }
+
+      button {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 30px;
+        background: #ff4e50;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.1);
+      }
+
+      .message {
+        margin-top: 20px;
+        opacity: 0;
+        transition: 0.5s;
+      }
+
+      .show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Dla Ciebie ❤️</h1>
+      <p id="time"></p>
+
+      <button onclick="showMessage()">Kliknij mnie 💌</button>
+      <div class="message" id="msg"></div>
+    </div>
+
+    <script>
+      // DATA STARTU (ZMIEN TO!)
+      const startDate = new Date("2025-11-13T13:00:00");
+
+      function updateTime() {
+        const now = new Date();
+        const diff = now - startDate;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("time").innerText =
+          `${days} dni ${hours}h ${minutes}m ${seconds}s razem 💖`;
+      }
+
+      setInterval(updateTime, 1000);
+
+      // LOSOWE WIADOMOŚCI
+      const messages = [
+        "Moja ulubiona cutie patootie 🥰",
+        "Tiruriru 🥺",
+        "Dałbym ci buzi w czółko 💕",
+        "Kocham cię 💖",
+        "Zjem cię ❤️😈",
+      ];
+
+      function showMessage() {
+        const msg = document.getElementById("msg");
+        const random = messages[Math.floor(Math.random() * messages.length)];
+        msg.innerText = random;
+        msg.classList.add("show");
+      }
+
+      // GENEROWANIE SERDUSZEK
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 6000);
+      }
+
+      setInterval(createHeart, 300);
+    </script>
+  </body>
+</html>
