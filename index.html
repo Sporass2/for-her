@@ -24,8 +24,6 @@
         overflow: hidden;
         color: white;
       }
-
-      /* floating hearts */
       .heart {
         position: absolute;
         width: 20px;
@@ -33,6 +31,7 @@
         background: red;
         transform: rotate(45deg);
         animation: float 6s linear infinite;
+        opacity: 0.7;
       }
 
       .heart::before,
@@ -47,36 +46,101 @@
 
       .heart::before {
         top: -10px;
-        left: 0;
       }
       .heart::after {
         left: -10px;
-        top: 0;
       }
 
       @keyframes float {
         0% {
-          transform: translateY(100vh) rotate(45deg);
+          transform: translateY(100vh) rotate(45deg) scale(0.5);
           opacity: 1;
         }
         100% {
-          transform: translateY(-10vh) rotate(45deg);
+          transform: translateY(-10vh) rotate(45deg) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* floating photos */
+      .photo {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 15px;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        animation: floatPhoto linear infinite;
+        opacity: 0.9;
+      }
+
+      @keyframes floatPhoto {
+        0% {
+          transform: translateY(110vh) rotate(0deg) scale(0.8);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-20vh) rotate(360deg) scale(1);
           opacity: 0;
         }
       }
 
       .container {
         text-align: center;
-        backdrop-filter: blur(15px);
-        padding: 40px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(20px);
+        padding: 50px 60px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+        z-index: 2;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* glow border */
+      .container::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 25px;
+        padding: 2px;
+        background: linear-gradient(45deg, #ff4e50, #ff9a9e, #fad0c4, #ff4e50);
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: borderGlow 6s linear infinite;
+      }
+
+      @keyframes borderGlow {
+        0% {
+          filter: hue-rotate(0deg);
+        }
+        100% {
+          filter: hue-rotate(360deg);
+        }
       }
 
       h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
+        font-size: 36px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #fff, #ff9a9e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glowText 3s ease-in-out infinite alternate;
+      }
+
+      @keyframes glowText {
+        from {
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        to {
+          text-shadow: 0 0 25px rgba(255, 100, 150, 0.8);
+        }
       }
 
       #time {
@@ -85,14 +149,43 @@
       }
 
       button {
-        padding: 12px 25px;
+        padding: 14px 30px;
         border: none;
-        border-radius: 30px;
-        background: #ff4e50;
+        border-radius: 40px;
+        background: linear-gradient(45deg, #ff4e50, #ff9a9e);
         color: white;
         font-size: 16px;
         cursor: pointer;
         transition: 0.3s;
+        box-shadow: 0 10px 25px rgba(255, 78, 80, 0.5);
+        position: relative;
+        overflow: hidden;
+      }
+
+      button::after {
+        content: "";
+        position: absolute;
+        width: 300%;
+        height: 300%;
+        top: -100%;
+        left: -100%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transform: rotate(25deg);
+        transition: 0.5s;
+      }
+
+      button:hover::after {
+        top: 0;
+        left: 0;
+      }
+
+      button:hover {
+        transform: scale(1.15);
+        box-shadow: 0 15px 40px rgba(255, 78, 80, 0.8);
       }
 
       button:hover {
@@ -100,9 +193,11 @@
       }
 
       .message {
-        margin-top: 20px;
+        margin-top: 25px;
         opacity: 0;
         transition: 0.5s;
+        font-size: 18px;
+        letter-spacing: 1px;
       }
 
       .show {
@@ -113,15 +208,14 @@
 
   <body>
     <div class="container">
-      <h1>Dla Ciebie ❤️</h1>
+      <h1>Literally us 💖</h1>
       <p id="time"></p>
 
-      <button onclick="showMessage()">Kliknij mnie 💌</button>
+      <button onclick="showMessage()">Nie klikaj!</button>
       <div class="message" id="msg"></div>
     </div>
 
     <script>
-      // DATA STARTU (ZMIEN TO!)
       const startDate = new Date("2025-11-13T13:00:00");
 
       function updateTime() {
@@ -139,13 +233,15 @@
 
       setInterval(updateTime, 1000);
 
-      // LOSOWE WIADOMOŚCI
       const messages = [
         "Moja ulubiona cutie patootie 🥰",
         "Tiruriru 🥺",
-        "Dałbym ci buzi w czółko 💕",
+        "Zjadłbym cię 💕",
         "Kocham cię 💖",
         "Zjem cię ❤️😈",
+        "Tęsknię za tobą 😘",
+        "Słoneczko 🌞",
+        "Cutie patootie 🥰",
       ];
 
       function showMessage() {
@@ -154,8 +250,64 @@
         msg.innerText = random;
         msg.classList.add("show");
       }
+      const photos = [
+        "img1.jpg",
+        "img2.jpg",
+        "img3.jpg",
+        "img4.jpg",
+        "img5.jpg",
+        "img6.jpg",
+        "img7.jpg",
+        "img8.jpg",
+        "img9.jpg",
+        "img10.jpg",
+        "img11.jpg",
+        "img12.jpg",
+        "img13.jpg",
+        "img14.jpg",
+        "img15.jpg",
+        "img16.jpg",
+        "img17.jpg",
+        "img18.jpg",
+        "img19.jpg",
+        "img20.jpg",
+        "img21.jpg",
+        "img22.jpg",
+        "img23.jpg",
+        "img24.jpg",
+        "img25.jpg",
+        "img26.jpg",
+        "img27.jpg",
+        "img28.jpg",
+        "img29.jpg",
+        "img30.jpg",
+        "img31.jpg",
+        "img32.jpg",
+        "img33.jpg",
+        "img34.jpg",
+        "img35.jpg",
+        "img36.jpg",
+        "img37.jpg",
+        "img38.jpg"
+      ];
 
-      // GENEROWANIE SERDUSZEK
+      function createPhoto() {
+        const img = document.createElement("img");
+        img.src = photos[Math.floor(Math.random() * photos.length)];
+        img.classList.add("photo");
+
+        img.style.left = Math.random() * 100 + "vw";
+        img.style.animationDuration = Math.random() * 5 + 5 + "s";
+
+        document.body.appendChild(img);
+
+        setTimeout(() => {
+          img.remove();
+        }, 10000);
+      }
+
+      setInterval(createPhoto, 1200);
+
       function createHeart() {
         const heart = document.createElement("div");
         heart.classList.add("heart");
